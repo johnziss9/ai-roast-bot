@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Roast Bot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>AI Roast Bot</h1>
+        <p>Ready to get roasted?</p>
+        <button id="captureBtn">Capture Photo</button>
+        <div id="status"></div>
+	<div id="imageContainer" style="display: none;">
+            <img id="capturedImage" src="" alt="Captured photo">
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
