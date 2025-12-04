@@ -22,6 +22,11 @@ if captures:
     print("\nAnalysis Results:")
     print(f"  Faces detected: {analysis['faces_detected']}")
     print(f"  Has face: {analysis['has_face']}")
+
+    if 'age_range' in analysis:
+        print(f"  Age range: {analysis['age_range']}")
+    else:
+        print("  Age range: Not detected")
 else:
     print("No captures found. Take a photo first!")
 

@@ -18,11 +18,14 @@ class RoastGenerator:
         # Build a personalized prompt based on analysis
         if analysis_data and analysis_data.get('has_face'):
             faces_count = analysis_data.get('faces_detected', 0)
+            age_range = analysis_data.get('age_range', None)
             
             if faces_count == 0:
                 context = "there's no face visible in this photo"
             elif faces_count == 1:
                 context = "there's one person in this photo"
+                if age_range:
+                    context += f" who appears to be in the {age_range} age range"
             else:
                 context = f"there are {faces_count} people in this photo"
             
