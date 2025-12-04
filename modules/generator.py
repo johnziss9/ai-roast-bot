@@ -10,17 +10,32 @@ class RoastGenerator:
         Generate a witty roast based on image analysis data.
         
         Args:
-            analysis_data: Dictionary with detected features (optional for now)
+            analysis_data: Dictionary with detected features
         
         Returns:
             String containing the roast text
         """
-        # For now, we'll use a simple prompt
-        # Later we'll make this more sophisticated with real analysis data
-        
-        prompt = """You are a witty roast comedian. Generate a funny, lighthearted roast 
-        that's humorous but not mean-spirited. Keep it to 3-5 sentences. 
-        Make it creative and unexpected."""
+        # Build a personalized prompt based on analysis
+        if analysis_data and analysis_data.get('has_face'):
+            faces_count = analysis_data.get('faces_detected', 0)
+            
+            if faces_count == 0:
+                context = "there's no face visible in this photo"
+            elif faces_count == 1:
+                context = "there's one person in this photo"
+            else:
+                context = f"there are {faces_count} people in this photo"
+            
+            prompt = f"""You are a witty roast comedian. Generate a funny, lighthearted roast.
+            Context: {context}
+            
+            Make the roast reference this context naturally. Keep it to 3-5 sentences.
+            Be humorous but not mean-spirited."""
+        else:
+            # Fallback for when no analysis available
+            prompt = """You are a witty roast comedian. Generate a funny, lighthearted roast 
+            that's humorous but not mean-spirited. Keep it to 3-5 sentences. 
+            Make it creative and unexpected."""
         
         try:
             message = self.client.messages.create(

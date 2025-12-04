@@ -1,11 +1,13 @@
-from flask import Flask, render_template, jsonify
+from flask import Flask, render_template, jsonify, request
 from modules.camera import Camera
 from modules.generator import RoastGenerator
+from modules.analyzer import ImageAnalyzer
 import os
 from datetime import datetime
 
 app = Flask(__name__)
 generator = RoastGenerator()
+analyzer = ImageAnalyzer()
 
 @app.route('/')
 def home():
@@ -32,13 +34,47 @@ def capture():
     except Exception as e:
         return {'success': False, 'error': str(e)}
 
-@app.route('/generate-roast')
+@app.route('/generate-roast', methods=['POST'])
 def generate_roast():
     try:
-        roast = generator.generate_roast()
+        # Get analysis data from request
+        data = request.get_json()
+        analysis_data = data.get('analysis', {})
+        
+        roast = generator.generate_roast(analysis_data)
         return jsonify({
             'success': True,
             'roast': roast
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
+
+@app.route('/analyze')
+def analyze():
+    try:
+        # Get the most recent capture
+        captures_dir = 'static/captures'
+        captures = [f for f in os.listdir(captures_dir) if f.endswith('.jpg')]
+        
+        if not captures:
+            return jsonify({
+                'success': False,
+                'error': 'No image to analyze'
+            }), 404
+        
+        # Get latest capture
+        latest_capture = sorted(captures)[-1]
+        image_path = os.path.join(captures_dir, latest_capture)
+        
+        # Analyze it
+        analysis = analyzer.analyze_image(image_path)
+        
+        return jsonify({
+            'success': True,
+            'analysis': analysis
         })
     except Exception as e:
         return jsonify({
