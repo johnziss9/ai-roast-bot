@@ -1,9 +1,11 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify
 from modules.camera import Camera
+from modules.generator import RoastGenerator
 import os
 from datetime import datetime
 
 app = Flask(__name__)
+generator = RoastGenerator()
 
 @app.route('/')
 def home():
@@ -29,6 +31,20 @@ def capture():
             
     except Exception as e:
         return {'success': False, 'error': str(e)}
+
+@app.route('/generate-roast')
+def generate_roast():
+    try:
+        roast = generator.generate_roast()
+        return jsonify({
+            'success': True,
+            'roast': roast
+        })
+    except Exception as e:
+        return jsonify({
+            'success': False,
+            'error': str(e)
+        }), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

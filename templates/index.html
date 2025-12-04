@@ -7,11 +7,20 @@
 <body>
     <div class="container">
         <h1>AI Roast Bot</h1>
+
         <p>Ready to get roasted?</p>
+
         <button id="captureBtn">Capture Photo</button>
+
         <div id="status"></div>
-	<div id="imageContainer" style="display: none;">
+
+	<div id="imageContainer">
             <img id="capturedImage" src="" alt="Captured photo">
+        </div>
+	
+	<div id="roastContainer">
+            <h2>The Roast</h2>
+            <p id="roastText"></p>
         </div>
     </div>
     <script src="{{ url_for('static', filename='js/main.js') }}"></script>
