@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Roast Bot</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
@@ -13,6 +14,7 @@
         <button id="captureBtn">Capture Photo</button>
 
         <div id="status"></div>
+        <div class="spinner" id="spinner"></div>
 
 	<div id="imageContainer">
             <img id="capturedImage" src="" alt="Captured photo">

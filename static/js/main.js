@@ -1,16 +1,19 @@
 const captureBtn = document.getElementById('captureBtn');
 const statusDiv = document.getElementById('status');
 const capturedImage = document.getElementById('capturedImage');
+const spinner = document.getElementById('spinner');
 
 captureBtn.addEventListener('click', async () => {
     captureBtn.disabled = true;
     captureBtn.textContent = 'Capturing photo...';
     statusDiv.textContent = 'Capturing photo...';
+    spinner.classList.add('active'); // Show spinner
     
     // Hide roast from previous capture
     const roastContainer = document.getElementById('roastContainer');
     const roastText = document.getElementById('roastText');
-    roastContainer.style.display = 'none';
+    roastContainer.classList.remove('show');
+    capturedImage.classList.remove('show', 'shrink');
     
     try {
         // Step 1: Capture the photo
@@ -21,7 +24,7 @@ captureBtn.addEventListener('click', async () => {
             statusDiv.textContent = 'Photo captured! Analyzing image...';
             const imagePath = `/static/captures/${captureData.filename}`;
             capturedImage.src = imagePath;
-            capturedImage.style.display = 'block';
+            capturedImage.classList.add('show');
             
             // Step 2: Analyze the image
             const analyzeResponse = await fetch('/analyze');
@@ -46,7 +49,8 @@ captureBtn.addEventListener('click', async () => {
                 if (roastData.success) {
                     statusDiv.textContent = 'Roast complete! 🔥';
                     roastText.textContent = roastData.roast;
-                    roastContainer.style.display = 'block';
+                    capturedImage.classList.add('shrink');
+                    roastContainer.classList.add('show');
                 } else {
                     statusDiv.textContent = `Roast generation failed: ${roastData.error}`;
                 }
@@ -61,5 +65,6 @@ captureBtn.addEventListener('click', async () => {
     } finally {
         captureBtn.disabled = false;
         captureBtn.textContent = 'Capture Photo';
+        spinner.classList.remove('active'); // Hide spinner
     }
 });
