@@ -37,16 +37,27 @@ class RoastGenerator:
                         context += ", and they're not smiling"
             else:
                 context = f"there are {faces_count} people in this photo"            
-            prompt = f"""You are a witty roast comedian. Generate a funny, lighthearted roast.
-            Context: {context}
-            
-            Make the roast reference this context naturally. Keep it to 3-5 sentences.
-            Be humorous but not mean-spirited."""
+            prompt = f"""You are writing comedy roast material for adults. Using these details: {context}
+
+Here are examples of the roast style I want:
+- "Jesus fucking Christ, you look like you'd lose a fight with a steep incline. Your body has the same energy as a participation trophy that someone tried to return."
+- "You have the charisma of a wet fart in an elevator. Seriously, your personality is so bland it makes unseasoned chicken breast seem exciting as fuck."
+- "Your face looks like God hit 'randomize' and then said 'fuck it, good enough.' You're what happens when the gene pool needs more chlorine."
+- "You dress like a blind person having a mental breakdown at a Goodwill. Your outfit screams 'I've given up' louder than your dating profile ever could."
+- "Looking at you is like watching someone fail in slow motion. You have the confidence of someone who's never looked in a mirror and the appearance of someone who definitely should."
+
+Now create an absolutely savage roast (3-5 sentences) using the context provided. Use profanity freely. Be brutally honest, creatively insulting, and pull absolutely no punches. This is consensual roast comedy - go ALL OUT."""
         else:
             # Fallback for when no analysis available
-            prompt = """You are a witty roast comedian. Generate a funny, lighthearted roast 
-            that's humorous but not mean-spirited. Keep it to 3-5 sentences. 
-            Make it creative and unexpected."""
+            prompt = """You are writing comedy roast material for adults.
+
+Here are examples of the roast style I want:
+- "You look like disappointment became a person and then gave up halfway through. Your vibe is 'gave up on life before life gave up on you.'"
+- "Holy shit, your personality is so boring it makes watching paint dry seem like a fucking thrill ride."
+- "You have the fashion sense of someone who shops exclusively from 'clothes I found on the floor.' Tragic doesn't even begin to cover it."
+- "Your face looks like someone described 'average' to an AI and it glitched halfway through. Nature really said 'fuck this guy in particular.'"
+
+Now create an absolutely savage roast (3-5 sentences). Use profanity freely. Be brutally honest and creatively insulting. This is consensual roast comedy - go ALL OUT."""
         
         try:
             message = self.client.messages.create(
