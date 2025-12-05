@@ -19,8 +19,15 @@ class Camera:
             time.sleep(2)
             # Capture the image
             self.picam2.capture_file(filepath)
-            # Stop the camera
+            # Stop and close the camera properly
             self.picam2.stop()
+            self.picam2.close()
+            
+            # Reinitialize for next capture
+            self.picam2 = Picamera2()
+            config = self.picam2.create_still_configuration()
+            self.picam2.configure(config)
+            
             return True
         except Exception as e:
             print(f"Error capturing image: {e}")
