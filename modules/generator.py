@@ -15,20 +15,28 @@ class RoastGenerator:
         Returns:
             String containing the roast text
         """
-        # Build a personalized prompt based on analysis
+	# Build a personalized prompt based on analysis
         if analysis_data and analysis_data.get('has_face'):
             faces_count = analysis_data.get('faces_detected', 0)
             age_range = analysis_data.get('age_range', None)
+            gender = analysis_data.get('gender', None)
+            is_smiling = analysis_data.get('is_smiling', None)
             
             if faces_count == 0:
                 context = "there's no face visible in this photo"
             elif faces_count == 1:
                 context = "there's one person in this photo"
+                if gender:
+                    context += f" who appears to be {gender}"
                 if age_range:
-                    context += f" who appears to be in the {age_range} age range"
+                    context += f" in the {age_range} age range"
+                if is_smiling is not None:
+                    if is_smiling:
+                        context += ", and they're smiling"
+                    else:
+                        context += ", and they're not smiling"
             else:
-                context = f"there are {faces_count} people in this photo"
-            
+                context = f"there are {faces_count} people in this photo"            
             prompt = f"""You are a witty roast comedian. Generate a funny, lighthearted roast.
             Context: {context}
             

@@ -4,17 +4,29 @@ import os
 # Age ranges that the model predicts
 AGE_RANGES = ['(0-2)', '(4-6)', '(8-12)', '(15-20)', '(25-32)', '(38-43)', '(48-53)', '(60-100)']
 
+# Gender labels that the model predicts
+GENDER_LIST = ['Male', 'Female']
+
 class ImageAnalyzer:
     def __init__(self):
         # Load the pre-trained face detection model (Haar Cascade)
         # This file comes with OpenCV
         cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         self.face_cascade = cv2.CascadeClassifier(cascade_path)
+
+	# Load smile detection cascade
+        smile_cascade_path = cv2.data.haarcascades + 'haarcascade_smile.xml'
+        self.smile_cascade = cv2.CascadeClassifier(smile_cascade_path)
         
         # Load age detection model
         age_proto = 'models/age_deploy.prototxt'
         age_model = 'models/age_net.caffemodel'
         self.age_net = cv2.dnn.readNet(age_model, age_proto) 
+
+	# Load gender detection model
+        gender_proto = 'models/gender_deploy.prototxt'
+        gender_model = 'models/gender_net.caffemodel'
+        self.gender_net = cv2.dnn.readNet(gender_model, gender_proto)
     
     def analyze_image(self, image_path):
         """
@@ -69,6 +81,25 @@ class ImageAnalyzer:
             age_range = AGE_RANGES[age_index]
             
             analysis['age_range'] = age_range
+
+	    # Predict gender (using same face blob)
+            self.gender_net.setInput(blob)
+            gender_preds = self.gender_net.forward()
+            gender_index = gender_preds[0].argmax()
+            gender = GENDER_LIST[gender_index]
+            
+            analysis['gender'] = gender
+
+	    # Detect smile in the face region
+            face_gray = gray[y:y+h, x:x+w]
+            smiles = self.smile_cascade.detectMultiScale(
+                face_gray,
+                scaleFactor=1.1,
+                minNeighbors=15,
+                minSize=(15, 15)
+            )
+            
+            analysis['is_smiling'] = len(smiles) > 0
         
         return analysis
 
