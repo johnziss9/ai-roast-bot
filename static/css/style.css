@@ -1,9 +1,16 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     background-color: #1a1a1a;
     color: #ffffff;
     margin: 0;
-    padding: 0;
+    padding: 20px;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .container {
