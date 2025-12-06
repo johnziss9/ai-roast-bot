@@ -47,6 +47,25 @@ button:hover {
     font-size: 1.1em;
 }
 
+#countdown {
+    font-size: 5em;
+    font-weight: bold;
+    color: #ff6b6b;
+    margin: 20px 0;
+    display: none; /* Hidden by default */
+    animation: pulse 0.5s ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 1; }
+}
+
+#countdown.active {
+    display: block;
+}
+
 #imageContainer {
     margin-top: 30px;
     display: flex;

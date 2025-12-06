@@ -2,9 +2,38 @@ const captureBtn = document.getElementById('captureBtn');
 const statusDiv = document.getElementById('status');
 const capturedImage = document.getElementById('capturedImage');
 const spinner = document.getElementById('spinner');
+const countdownDiv = document.getElementById('countdown');
+
+// Countdown function
+function startCountdown(seconds) {
+    return new Promise((resolve) => {
+        countdownDiv.classList.add('active');
+        countdownDiv.textContent = seconds;
+        
+        const countdownInterval = setInterval(() => {
+            seconds--;
+            if (seconds > 0) {
+                countdownDiv.textContent = seconds;
+            } else if (seconds === 0) {
+                countdownDiv.textContent = 'Smile! 😄';
+            } else {
+                clearInterval(countdownInterval);
+                countdownDiv.classList.remove('active');
+                resolve();
+            }
+        }, 1000);
+    });
+}
 
 captureBtn.addEventListener('click', async () => {
     captureBtn.disabled = true;
+    captureBtn.textContent = 'Get ready...';
+    statusDiv.textContent = 'Get ready to pose!';
+
+    // Start countdown before capture
+    await startCountdown(3);
+    
+    // Now update for actual capture
     captureBtn.textContent = 'Capturing photo...';
     statusDiv.textContent = 'Capturing photo...';
     spinner.classList.add('active'); // Show spinner
