@@ -33,10 +33,10 @@ if captures:
     else:
         print("  Gender: Not detected")
     
-    if 'is_smiling' in analysis:
-        print(f"  Smiling: {analysis['is_smiling']}")
+    if 'eyes_detected' in analysis:
+        print(f"  Eyes detected: {analysis['eyes_detected']}")
     else:
-        print("  Smiling: Not detected")
+        print("  Eyes detected: Not detected")
 
     # Print full analysis for debugging
     print(f"\nFull analysis data: {analysis}")

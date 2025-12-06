@@ -14,16 +14,16 @@ class ImageAnalyzer:
         cascade_path = cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
         self.face_cascade = cv2.CascadeClassifier(cascade_path)
 
-	# Load smile detection cascade
-        smile_cascade_path = cv2.data.haarcascades + 'haarcascade_smile.xml'
-        self.smile_cascade = cv2.CascadeClassifier(smile_cascade_path)
+	    # Load eye detection cascade
+        eye_cascade_path = cv2.data.haarcascades + 'haarcascade_eye.xml'
+        self.eye_cascade = cv2.CascadeClassifier(eye_cascade_path)
         
         # Load age detection model
         age_proto = 'models/age_deploy.prototxt'
         age_model = 'models/age_net.caffemodel'
         self.age_net = cv2.dnn.readNet(age_model, age_proto) 
 
-	# Load gender detection model
+	    # Load gender detection model
         gender_proto = 'models/gender_deploy.prototxt'
         gender_model = 'models/gender_net.caffemodel'
         self.gender_net = cv2.dnn.readNet(gender_model, gender_proto)
@@ -82,7 +82,7 @@ class ImageAnalyzer:
             
             analysis['age_range'] = age_range
 
-	    # Predict gender (using same face blob)
+	        # Predict gender (using same face blob)
             self.gender_net.setInput(blob)
             gender_preds = self.gender_net.forward()
             gender_index = gender_preds[0].argmax()
@@ -90,16 +90,17 @@ class ImageAnalyzer:
             
             analysis['gender'] = gender
 
-	    # Detect smile in the face region
+	        # Detect eyes in the face region
             face_gray = gray[y:y+h, x:x+w]
-            smiles = self.smile_cascade.detectMultiScale(
+            eyes = self.eye_cascade.detectMultiScale(
                 face_gray,
                 scaleFactor=1.1,
-                minNeighbors=15,
-                minSize=(15, 15)
+                minNeighbors=5,
+                minSize=(20, 20)
             )
             
-            analysis['is_smiling'] = len(smiles) > 0
+            analysis['eyes_detected'] = len(eyes)
+            analysis['has_eyes'] = len(eyes) > 0
         
         return analysis
 
